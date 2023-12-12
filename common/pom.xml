@@ -9,14 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>user-service</artifactId>
+    <artifactId>common</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>user-domain</module>
-        <module>user-application</module>
-        <module>user-dataaccess</module>
-        <module>user-messaging</module>
-        <module>user-container</module>
+        <module>common-domain</module>
     </modules>
 
 

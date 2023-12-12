@@ -3,20 +3,17 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>model-3d-system</artifactId>
+        <artifactId>user-service</artifactId>
         <groupId>com.model3d.system</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>user-service</artifactId>
+    <artifactId>user-domain</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>user-domain</module>
-        <module>user-application</module>
-        <module>user-dataaccess</module>
-        <module>user-messaging</module>
-        <module>user-container</module>
+        <module>user-domain-core</module>
+        <module>user-application-service</module>
     </modules>
 
 
