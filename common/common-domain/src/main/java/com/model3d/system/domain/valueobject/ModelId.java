@@ -2,8 +2,8 @@ package com.model3d.system.domain.valueobject;
 
 import java.util.UUID;
 
-public class UserId extends BaseId<UUID> {
-     public UserId(UUID value) {
+public class ModelId extends BaseId<UUID> {
+    protected ModelId(UUID value) {
         super(value);
     }
 }
