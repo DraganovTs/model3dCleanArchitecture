@@ -9,7 +9,7 @@ public class UserRole extends BaseEntity<UserRoleId> {
 
     private final UserRoleEnum roleEnum;
 
-    private UserRole(Builder builder) {
+    protected UserRole(Builder builder) {
         super.setId(builder.userRoleId);
         roleEnum = builder.roleEnum;
     }
@@ -23,7 +23,7 @@ public class UserRole extends BaseEntity<UserRoleId> {
         private UserRoleId userRoleId;
         private UserRoleEnum roleEnum;
 
-        private Builder() {
+        Builder() {
         }
 
         public static Builder builder() {
