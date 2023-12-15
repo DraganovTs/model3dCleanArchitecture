@@ -15,7 +15,7 @@ import java.util.UUID;
 
 
 public class User extends AggregateRoot<UserId> {
-    private UserId userId;
+    private final UserId userId;
     private final Username username;
     private final Email email;
     private Money userMoney;
@@ -37,10 +37,10 @@ public class User extends AggregateRoot<UserId> {
     }
 
 
-    public void initializeUser(String email, String username) {
+    public void initializeUser(User user) {
         setId(new UserId(UUID.randomUUID()));
-        initializeEmail(email);
-        initializeUserName(username);
+        initializeEmail(user.getEmail().toString());
+        initializeUserName(user.getUsername().toString());
         setUserRole(UserRoleEnum.USER);
         userMoney = Money.ZERO;
         ownedModels = new ArrayList<>();

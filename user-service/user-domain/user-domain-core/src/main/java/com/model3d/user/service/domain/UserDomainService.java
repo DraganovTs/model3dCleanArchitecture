@@ -10,7 +10,6 @@ public interface UserDomainService {
 
     UserUpdatedEvent updateUser(User user);
 
-    UserDeletedEvent deleteUser(User user);
 
     UserDownloadedModelEvent userDownloadModel(User user,Model model);
 

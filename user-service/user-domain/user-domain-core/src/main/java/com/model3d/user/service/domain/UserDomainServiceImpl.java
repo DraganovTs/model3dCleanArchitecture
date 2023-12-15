@@ -16,7 +16,7 @@ public class UserDomainServiceImpl implements UserDomainService {
 
     @Override
     public UserCreatedEvent createUser(User user) {
-        user.initializeUser(user.getEmail().toString(), user.getUsername().toString());
+        user.initializeUser(user);
         log.info("User whit id: {} is initiated", user.getUserId().getValue());
         return new UserCreatedEvent(user, ZonedDateTime.now(ZoneId.of(UTC)));
     }
@@ -26,10 +26,6 @@ public class UserDomainServiceImpl implements UserDomainService {
         return null;
     }
 
-    @Override
-    public UserDeletedEvent deleteUser(User user) {
-        return null;
-    }
 
     @Override
     public UserDownloadedModelEvent userDownloadModel(User user, Model model) {
