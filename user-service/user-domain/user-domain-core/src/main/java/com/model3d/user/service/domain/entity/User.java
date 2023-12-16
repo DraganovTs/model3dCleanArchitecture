@@ -15,18 +15,16 @@ import java.util.UUID;
 
 
 public class User extends AggregateRoot<UserId> {
-    private final UserId userId;
     private final Username username;
     private final Email email;
     private Money userMoney;
-    private final List<UserRole> roles;
+    private  List<UserRole> roles;
     private List<ModelId> ownedModels;
     private List<ModelId> downloadedModels;
     private List<ModelId> likedModels;
 
     private User(Builder builder) {
         super.setId(builder.userId);
-        userId = builder.userId;
         username = builder.username;
         email = builder.email;
         userMoney = builder.userMoney;
@@ -39,8 +37,9 @@ public class User extends AggregateRoot<UserId> {
 
     public void initializeUser(User user) {
         setId(new UserId(UUID.randomUUID()));
-        initializeEmail(user.getEmail().toString());
-        initializeUserName(user.getUsername().toString());
+        initializeEmail(user.getEmail().getUserEmail());
+        initializeUserName(user.getUsername().getNickName());
+        roles = new ArrayList<>();
         setUserRole(UserRoleEnum.USER);
         userMoney = Money.ZERO;
         ownedModels = new ArrayList<>();
@@ -61,7 +60,7 @@ public class User extends AggregateRoot<UserId> {
 
     public void likeModel(ModelId modelId) {
         if (this.likedModels.contains(modelId)) {
-            throw new UserDomainException("Model is already in liked by you!!!");
+            throw new UserDomainException("Model is already is liked by you!!!");
         }
         this.likedModels.add(modelId);
     }
@@ -88,11 +87,6 @@ public class User extends AggregateRoot<UserId> {
                 .roleEnum(roleEnum)
                 .build();
         this.roles.add(userRole);
-    }
-
-
-    public UserId getUserId() {
-        return userId;
     }
 
     public Username getUsername() {
@@ -123,6 +117,7 @@ public class User extends AggregateRoot<UserId> {
         return likedModels;
     }
 
+
     public static final class Builder {
         private UserId userId;
         private Username username;
@@ -139,7 +134,6 @@ public class User extends AggregateRoot<UserId> {
         public static Builder builder() {
             return new Builder();
         }
-
 
         public Builder userId(UserId val) {
             userId = val;

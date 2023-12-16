@@ -18,4 +18,6 @@ public class CreateUserResponse  {
     private String username;
     @NotNull
     private String email;
+    @NotNull
+    private String message;
 }

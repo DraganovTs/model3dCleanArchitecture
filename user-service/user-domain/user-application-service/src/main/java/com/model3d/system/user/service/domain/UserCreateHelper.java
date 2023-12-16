@@ -36,13 +36,13 @@ public class UserCreateHelper {
         User user = userDataMapper.createUserCommandToUser(createUserCommand);
         UserCreatedEvent userCreatedEvent = userDomainService.createUser(user);
         saveUser(user);
-        log.info("User is created whit id: {}", userCreatedEvent.getUser().getUserId().getValue());
+        log.info("User is created whit id: {}", userCreatedEvent.getUser().getId().getValue());
         return userCreatedEvent;
     }
 
     private void checkUsernameExist(String username) {
         Optional<User> user = userRepository.findByUsername(username);
-        if (user.isEmpty()) {
+        if (user.isPresent()) {
             log.warn("User with username: {} already exist", username);
             throw new UserDomainException("User with username: " + username + " already exist");
         }
@@ -50,7 +50,7 @@ public class UserCreateHelper {
 
     private void checkEmailExist(String email) {
         Optional<User> user = userRepository.findByEmail(email);
-        if (user.isEmpty()) {
+        if (user.isPresent()) {
             log.warn("User with email: {} already exist", email);
             throw new UserDomainException("User with email: " + email + " already exist");
         }
@@ -62,7 +62,7 @@ public class UserCreateHelper {
             log.error("Could not save user!");
             throw new UserDomainException("Could not save user!");
         }
-        log.info("User is saved with id: {}", userResult.getUserId().getValue());
+        log.info("User is saved with id: {}", userResult.getId().getValue());
         return userResult;
     }
 }

@@ -18,8 +18,11 @@ public class UserDataMapper {
                 .build();
     }
 
-    public CreateUserResponse userToUserResponse(User user) {
-        return new CreateUserResponse(user.getUsername().getNickName()
-                , user.getEmail().getUserEmail());
+    public CreateUserResponse userToCreateUserResponse(User user ,String message) {
+        return CreateUserResponse.builder()
+                .email(user.getEmail().getUserEmail())
+                .username(user.getUsername().getNickName())
+                .message(message)
+                .build();
     }
 }

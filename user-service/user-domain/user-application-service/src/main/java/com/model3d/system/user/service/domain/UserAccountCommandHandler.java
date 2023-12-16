@@ -9,10 +9,12 @@ import com.model3d.system.user.service.domain.ports.output.message.publisher.use
 import com.model3d.user.service.domain.event.UserCreatedEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.UUID;
 
 @Slf4j
+@Validated
 @Component
 public class UserAccountCommandHandler {
 
@@ -33,9 +35,9 @@ public class UserAccountCommandHandler {
 
     public CreateUserResponse createUser(CreateUserCommand createUserCommand) {
         UserCreatedEvent userCreatedEvent = userCreateHelper.persistUser(createUserCommand);
-        log.info("User is created whit id: {}", userCreatedEvent.getUser().getUserId().getValue());
+        log.info("User is created whit id: {}", userCreatedEvent.getUser().getId().getValue());
         userCreatedMessagePublisher.publish(userCreatedEvent);
-        return userDataMapper.userToUserResponse(userCreatedEvent.getUser());
+        return userDataMapper.userToCreateUserResponse(userCreatedEvent.getUser(),"User created Successfully");
     }
 
 

@@ -17,7 +17,7 @@ public class UserDomainServiceImpl implements UserDomainService {
     @Override
     public UserCreatedEvent createUser(User user) {
         user.initializeUser(user);
-        log.info("User whit id: {} is initiated", user.getUserId().getValue());
+        log.info("User whit id: {} is initiated", user.getId().getValue());
         return new UserCreatedEvent(user, ZonedDateTime.now(ZoneId.of(UTC)));
     }
 
@@ -36,7 +36,7 @@ public class UserDomainServiceImpl implements UserDomainService {
     public UserDownloadedModelEvent userDownloadModel(User user, Model model) {
         validateModel(model);
         user.downloadModel(model.getId());
-        log.info("User whit id: {} downloaded model whit id {}", user.getUserId().getValue()
+        log.info("User whit id: {} downloaded model whit id {}", user.getId().getValue()
                 , model.getId().getValue());
         return new UserDownloadedModelEvent(user, model, ZonedDateTime.now(ZoneId.of(UTC)));
     }
@@ -46,7 +46,7 @@ public class UserDomainServiceImpl implements UserDomainService {
     public UserLikedModelEvent userLikedModel(User user, Model model) {
         validateModel(model);
         user.likeModel(model.getId());
-        log.info("User whit id: {} liked model whit id {}", user.getUserId().getValue()
+        log.info("User whit id: {} liked model whit id {}", user.getId().getValue()
                 , model.getId().getValue());
         return new UserLikedModelEvent(user, model, ZonedDateTime.now(ZoneId.of(UTC)));
     }
@@ -55,7 +55,7 @@ public class UserDomainServiceImpl implements UserDomainService {
     public UserUploadModelEvent userUploadModel(User user, Model model) {
         validateModel(model);
         user.uploadModel(model.getId());
-        log.info("User whit id: {} uploaded model whit id {}", user.getUserId().getValue()
+        log.info("User whit id: {} uploaded model whit id {}", user.getId().getValue()
                 , model.getId().getValue());
         return new UserUploadModelEvent(user, model, ZonedDateTime.now(ZoneId.of(UTC)));
     }

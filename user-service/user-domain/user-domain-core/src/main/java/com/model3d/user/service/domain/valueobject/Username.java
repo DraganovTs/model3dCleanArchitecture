@@ -12,7 +12,7 @@ public class Username {
     }
 
     public boolean validateUsername() {
-        return this.nickName != null && isUsernameOffencive(this.nickName);
+        return this.nickName != null && isUsernameOffencive(this.nickName) && this.nickName.length() > 5;
     }
 
     private boolean isUsernameOffencive(String nickName) {
