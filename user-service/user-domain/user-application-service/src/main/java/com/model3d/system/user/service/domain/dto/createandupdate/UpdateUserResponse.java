@@ -16,4 +16,6 @@ public class UpdateUserResponse {
     private String username;
     @NotNull
     private String email;
+    @NotNull
+    private String message;
 }

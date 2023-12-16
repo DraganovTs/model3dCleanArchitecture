@@ -35,7 +35,7 @@ public class User extends AggregateRoot<UserId> {
     }
 
 
-    public void initializeUser(User user) {
+    public User initializeUser(User user) {
         setId(new UserId(UUID.randomUUID()));
         initializeEmail(user.getEmail().getUserEmail());
         initializeUserName(user.getUsername().getNickName());
@@ -45,6 +45,18 @@ public class User extends AggregateRoot<UserId> {
         ownedModels = new ArrayList<>();
         downloadedModels = new ArrayList<>();
         likedModels = new ArrayList<>();
+        return this;
+    }
+
+    public void updateUser(User user){
+        setId(user.getId());
+        initializeEmail(user.getEmail().getUserEmail());
+        initializeUserName(user.getUsername().getNickName());
+        roles = user.getRoles();
+        userMoney = user.getUserMoney();
+        ownedModels = user.getOwnedModels();
+        downloadedModels = user.getDownloadedModels();
+        likedModels = user.getLikedModels();
     }
 
     public void uploadModel(ModelId modelId) {

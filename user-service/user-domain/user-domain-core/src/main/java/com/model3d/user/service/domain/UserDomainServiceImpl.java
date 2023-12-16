@@ -16,14 +16,16 @@ public class UserDomainServiceImpl implements UserDomainService {
 
     @Override
     public UserCreatedEvent createUser(User user) {
-        user.initializeUser(user);
+        User updatedUser = user.initializeUser(user);
         log.info("User whit id: {} is initiated", user.getId().getValue());
-        return new UserCreatedEvent(user, ZonedDateTime.now(ZoneId.of(UTC)));
+        return new UserCreatedEvent(updatedUser, ZonedDateTime.now(ZoneId.of(UTC)));
     }
 
     @Override
     public UserUpdatedEvent updateUser(User user) {
-        return null;
+         user.updateUser(user);
+        log.info("User whit id: {} is updated", user.getId().getValue());
+        return new UserUpdatedEvent(user, ZonedDateTime.now(ZoneId.of(UTC)));
     }
 
     @Override

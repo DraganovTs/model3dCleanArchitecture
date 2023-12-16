@@ -1,29 +1,32 @@
 package com.model3d.system.user.service.domain;
 
 import com.model3d.system.user.service.domain.dto.createandupdate.CreateUserCommand;
+import com.model3d.system.user.service.domain.dto.createandupdate.UpdateUserCommand;
 import com.model3d.system.user.service.domain.mapper.UserDataMapper;
 import com.model3d.system.user.service.domain.ports.output.repository.UserRepository;
 import com.model3d.user.service.domain.UserDomainService;
 import com.model3d.user.service.domain.entity.User;
 import com.model3d.user.service.domain.event.UserCreatedEvent;
+import com.model3d.user.service.domain.event.UserUpdatedEvent;
 import com.model3d.user.service.domain.exception.UserDomainException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Component
-public class UserCreateHelper {
+public class UserAccountHelper {
 
     private final UserDomainService userDomainService;
     private final UserRepository userRepository;
     private final UserDataMapper userDataMapper;
 
-    public UserCreateHelper(UserDomainService userDomainService,
-                            UserRepository userRepository,
-                            UserDataMapper userDataMapper) {
+    public UserAccountHelper(UserDomainService userDomainService,
+                             UserRepository userRepository,
+                             UserDataMapper userDataMapper) {
         this.userDomainService = userDomainService;
         this.userRepository = userRepository;
         this.userDataMapper = userDataMapper;
@@ -38,6 +41,23 @@ public class UserCreateHelper {
         saveUser(user);
         log.info("User is created whit id: {}", userCreatedEvent.getUser().getId().getValue());
         return userCreatedEvent;
+    }
+
+    @Transactional
+    public UserUpdatedEvent updateUser(UpdateUserCommand updateUserCommand) {
+        checkUserExist(updateUserCommand.getUserId());
+        checkEmailExist(updateUserCommand.getEmail());
+        checkUsernameExist(updateUserCommand.getUsername());
+        User user = userDataMapper.updateUserCommandToUser(updateUserCommand);
+        return null;
+    }
+
+    private void checkUserExist(UUID userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            log.warn("Could not find user with user id: {}", userId);
+            throw new UserDomainException("Could not find user with user id: " + userId);
+        }
     }
 
     private void checkUsernameExist(String username) {
@@ -65,4 +85,6 @@ public class UserCreateHelper {
         log.info("User is saved with id: {}", userResult.getId().getValue());
         return userResult;
     }
+
+
 }
