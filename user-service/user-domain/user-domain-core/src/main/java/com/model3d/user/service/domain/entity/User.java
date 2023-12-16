@@ -4,12 +4,12 @@ import com.model3d.system.domain.entity.AggregateRoot;
 import com.model3d.system.domain.valueobject.ModelId;
 import com.model3d.system.domain.valueobject.Money;
 import com.model3d.system.domain.valueobject.UserId;
+import com.model3d.system.domain.valueobject.UserStatus;
 import com.model3d.user.service.domain.exception.UserDomainException;
 import com.model3d.user.service.domain.valueobject.Email;
 import com.model3d.user.service.domain.valueobject.UserRoleEnum;
 import com.model3d.user.service.domain.valueobject.Username;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,6 +18,8 @@ public class User extends AggregateRoot<UserId> {
     private final Username username;
     private final Email email;
     private Money userMoney;
+
+    private UserStatus status;
     private  List<UserRole> roles;
     private List<ModelId> ownedModels;
     private List<ModelId> downloadedModels;
@@ -35,17 +37,10 @@ public class User extends AggregateRoot<UserId> {
     }
 
 
-    public User initializeUser(User user) {
+    public void initializeUser() {
         setId(new UserId(UUID.randomUUID()));
-        initializeEmail(user.getEmail().getUserEmail());
-        initializeUserName(user.getUsername().getNickName());
-        roles = new ArrayList<>();
-        setUserRole(UserRoleEnum.USER);
-        userMoney = Money.ZERO;
-        ownedModels = new ArrayList<>();
-        downloadedModels = new ArrayList<>();
-        likedModels = new ArrayList<>();
-        return this;
+        status = UserStatus.ACTIVE;
+        initializeUserRoles(UserRoleEnum.USER);
     }
 
     public void updateUser(User user){
@@ -94,7 +89,7 @@ public class User extends AggregateRoot<UserId> {
 
     }
 
-    private void setUserRole(UserRoleEnum roleEnum) {
+    private void initializeUserRoles(UserRoleEnum roleEnum) {
         UserRole userRole = new UserRole.Builder()
                 .roleEnum(roleEnum)
                 .build();

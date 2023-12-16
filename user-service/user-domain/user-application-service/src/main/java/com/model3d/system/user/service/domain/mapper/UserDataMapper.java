@@ -6,9 +6,14 @@ import com.model3d.system.user.service.domain.dto.createandupdate.CreateUserComm
 import com.model3d.system.user.service.domain.dto.createandupdate.CreateUserResponse;
 import com.model3d.system.user.service.domain.dto.createandupdate.UpdateUserCommand;
 import com.model3d.user.service.domain.entity.User;
+import com.model3d.user.service.domain.entity.UserRole;
 import com.model3d.user.service.domain.valueobject.Email;
 import com.model3d.user.service.domain.valueobject.Username;
 import org.springframework.stereotype.Component;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class UserDataMapper {
@@ -18,13 +23,19 @@ public class UserDataMapper {
         return User.Builder.builder()
                 .email(new Email(createUserCommand.getEmail()))
                 .username(new Username(createUserCommand.getUsername()))
+                .userMoney(new Money(BigDecimal.ZERO))
+                .roles(createUserCommand.getRoles())
+                .ownedModels(new ArrayList<>())
+                .downloadedModels(new ArrayList<>())
+                .likedModels(new ArrayList<>())
                 .build();
     }
 
-    public CreateUserResponse userToCreateUserResponse(User user ,String message) {
+
+    public CreateUserResponse userToCreateUserResponse(User user, String message) {
         return CreateUserResponse.builder()
-                .email(user.getEmail().getUserEmail())
                 .username(user.getUsername().getNickName())
+                .email(user.getEmail().getUserEmail())
                 .message(message)
                 .build();
     }
@@ -34,7 +45,6 @@ public class UserDataMapper {
                 .userId(new UserId(updateUserCommand.getUserId()))
                 .email(new Email(updateUserCommand.getEmail()))
                 .username(new Username(updateUserCommand.getUsername()))
-                .userMoney(new Money(updateUserCommand.ge))
                 .build();
     }
 }

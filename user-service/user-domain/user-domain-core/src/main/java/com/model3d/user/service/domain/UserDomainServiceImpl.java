@@ -2,12 +2,14 @@ package com.model3d.user.service.domain;
 
 import com.model3d.user.service.domain.entity.Model;
 import com.model3d.user.service.domain.entity.User;
+import com.model3d.user.service.domain.entity.UserRole;
 import com.model3d.user.service.domain.event.*;
 import com.model3d.user.service.domain.exception.UserDomainException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Slf4j
 public class UserDomainServiceImpl implements UserDomainService {
@@ -15,15 +17,15 @@ public class UserDomainServiceImpl implements UserDomainService {
     public static final String UTC = "UTC";
 
     @Override
-    public UserCreatedEvent createUser(User user) {
-        User updatedUser = user.initializeUser(user);
+    public UserCreatedEvent createUser(User user, List<UserRole> roles) {
+        user.initializeUser();
         log.info("User whit id: {} is initiated", user.getId().getValue());
-        return new UserCreatedEvent(updatedUser, ZonedDateTime.now(ZoneId.of(UTC)));
+        return new UserCreatedEvent(user, ZonedDateTime.now(ZoneId.of(UTC)));
     }
 
     @Override
     public UserUpdatedEvent updateUser(User user) {
-         user.updateUser(user);
+        user.updateUser(user);
         log.info("User whit id: {} is updated", user.getId().getValue());
         return new UserUpdatedEvent(user, ZonedDateTime.now(ZoneId.of(UTC)));
     }

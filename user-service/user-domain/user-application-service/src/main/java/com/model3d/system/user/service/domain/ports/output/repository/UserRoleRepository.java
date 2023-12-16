@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface UserRoleRepository {
 
-    Optional<UserRole> findUserRole(UserRoleEnum userRoleEnum);
+    Optional<UserRole> findUserRole(UserRole userRole);
 }

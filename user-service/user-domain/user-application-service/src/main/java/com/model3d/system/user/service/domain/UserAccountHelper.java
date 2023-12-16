@@ -4,15 +4,20 @@ import com.model3d.system.user.service.domain.dto.createandupdate.CreateUserComm
 import com.model3d.system.user.service.domain.dto.createandupdate.UpdateUserCommand;
 import com.model3d.system.user.service.domain.mapper.UserDataMapper;
 import com.model3d.system.user.service.domain.ports.output.repository.UserRepository;
+import com.model3d.system.user.service.domain.ports.output.repository.UserRoleRepository;
 import com.model3d.user.service.domain.UserDomainService;
 import com.model3d.user.service.domain.entity.User;
+import com.model3d.user.service.domain.entity.UserRole;
 import com.model3d.user.service.domain.event.UserCreatedEvent;
 import com.model3d.user.service.domain.event.UserUpdatedEvent;
 import com.model3d.user.service.domain.exception.UserDomainException;
+import com.model3d.user.service.domain.exception.UserRoleException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,13 +27,16 @@ public class UserAccountHelper {
 
     private final UserDomainService userDomainService;
     private final UserRepository userRepository;
+    private final UserRoleRepository userRoleRepository;
     private final UserDataMapper userDataMapper;
 
     public UserAccountHelper(UserDomainService userDomainService,
                              UserRepository userRepository,
+                             UserRoleRepository userRoleRepository,
                              UserDataMapper userDataMapper) {
         this.userDomainService = userDomainService;
         this.userRepository = userRepository;
+        this.userRoleRepository = userRoleRepository;
         this.userDataMapper = userDataMapper;
     }
 
@@ -36,11 +44,25 @@ public class UserAccountHelper {
     public UserCreatedEvent persistUser(CreateUserCommand createUserCommand) {
         checkEmailExist(createUserCommand.getEmail());
         checkUsernameExist(createUserCommand.getUsername());
+        List<UserRole> userRoles = checkUserRole(createUserCommand.getRoles());
         User user = userDataMapper.createUserCommandToUser(createUserCommand);
-        UserCreatedEvent userCreatedEvent = userDomainService.createUser(user);
+        UserCreatedEvent userCreatedEvent = userDomainService.createUser(user,userRoles);
         saveUser(user);
         log.info("User is created whit id: {}", userCreatedEvent.getUser().getId().getValue());
         return userCreatedEvent;
+    }
+
+    private List<UserRole> checkUserRole(List<UserRole> roles) {
+        List<UserRole> userRolesResult = new ArrayList<>();
+        for (UserRole role : roles) {
+            role = this.userRoleRepository.findUserRole(role).get();
+            userRolesResult.add(role);
+        }
+        if (userRolesResult.isEmpty()) {
+            log.warn("No valid roles for this user");
+            throw new UserRoleException("No valid roles for this user");
+        }
+        return userRolesResult;
     }
 
     @Transactional
