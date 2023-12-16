@@ -26,6 +26,11 @@ public class UserDomainServiceImpl implements UserDomainService {
         return null;
     }
 
+    @Override
+    public UserDeletedEvent deleteUser(User user) {
+        return null;
+    }
+
 
     @Override
     public UserDownloadedModelEvent userDownloadModel(User user, Model model) {

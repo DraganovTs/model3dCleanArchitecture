@@ -1,9 +1,19 @@
 package com.model3d.system.user.service.domain.dto.createandupdate;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+
+
 import javax.validation.constraints.NotNull;
 
-public class UpdateUserResponse extends UserAccountResponse {
-    public UpdateUserResponse(@NotNull String message) {
-        super(message);
-    }
+@Getter
+@Builder
+@AllArgsConstructor
+public class UpdateUserResponse {
+
+    @NotNull
+    private String username;
+    @NotNull
+    private String email;
 }

@@ -19,8 +19,7 @@ public class UserDataMapper {
     }
 
     public CreateUserResponse userToUserResponse(User user) {
-        return new CreateUserResponse("You created user whit id: " + user.getUserId().getValue() +
-                " username: " + user.getUsername().getNickName() + " and email: "
-                + user.getEmail().getUserEmail());
+        return new CreateUserResponse(user.getUsername().getNickName()
+                , user.getEmail().getUserEmail());
     }
 }
