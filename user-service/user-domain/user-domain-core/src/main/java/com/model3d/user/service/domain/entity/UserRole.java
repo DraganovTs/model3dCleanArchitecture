@@ -4,6 +4,8 @@ import com.model3d.system.domain.entity.BaseEntity;
 import com.model3d.user.service.domain.valueobject.UserRoleId;
 import com.model3d.user.service.domain.valueobject.UserRoleEnum;
 
+import java.util.Arrays;
+
 
 public class UserRole extends BaseEntity<UserRoleId> {
 
@@ -13,6 +15,8 @@ public class UserRole extends BaseEntity<UserRoleId> {
         super.setId(builder.userRoleId);
         roleEnum = builder.roleEnum;
     }
+
+
 
 
     public UserRoleEnum getRoleEnum() {

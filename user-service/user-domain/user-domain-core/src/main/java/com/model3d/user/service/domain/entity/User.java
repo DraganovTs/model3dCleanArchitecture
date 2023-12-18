@@ -7,6 +7,7 @@ import com.model3d.system.domain.valueobject.UserId;
 import com.model3d.user.service.domain.exception.UserDomainException;
 import com.model3d.user.service.domain.valueobject.Email;
 import com.model3d.user.service.domain.valueobject.UserRoleEnum;
+import com.model3d.user.service.domain.valueobject.UserStatus;
 import com.model3d.user.service.domain.valueobject.Username;
 
 import java.util.ArrayList;
@@ -17,8 +18,9 @@ import java.util.UUID;
 public class User extends AggregateRoot<UserId> {
     private final Username username;
     private final Email email;
+    private UserStatus userStatus;
     private Money userMoney;
-    private  List<UserRole> roles;
+    private List<UserRole> roles;
     private List<ModelId> ownedModels;
     private List<ModelId> downloadedModels;
     private List<ModelId> likedModels;
@@ -27,6 +29,7 @@ public class User extends AggregateRoot<UserId> {
         super.setId(builder.userId);
         username = builder.username;
         email = builder.email;
+        userStatus = builder.userStatus;
         userMoney = builder.userMoney;
         roles = builder.roles;
         ownedModels = builder.ownedModels;
@@ -35,17 +38,24 @@ public class User extends AggregateRoot<UserId> {
     }
 
 
-    public void initializeUser(User user) {
+    public void initializeUser() {
         setId(new UserId(UUID.randomUUID()));
-        initializeEmail(user.getEmail().getUserEmail());
-        initializeUserName(user.getUsername().getNickName());
-        roles = new ArrayList<>();
-        setUserRole(UserRoleEnum.USER);
+        userStatus = UserStatus.ACTIVE;
         userMoney = Money.ZERO;
+        roles = new ArrayList<>();
         ownedModels = new ArrayList<>();
         downloadedModels = new ArrayList<>();
         likedModels = new ArrayList<>();
     }
+
+    public void validateUser() {
+        if (getId() != null || userStatus != null || userMoney != null
+                || roles != null  || ownedModels!= null || downloadedModels!= null ||
+                likedModels!= null) {
+            throw new UserDomainException("User is not in correct state for initialization!");
+        }
+    }
+
 
     public void uploadModel(ModelId modelId) {
         if (this.ownedModels.contains(modelId) || modelId == null) {
@@ -65,36 +75,16 @@ public class User extends AggregateRoot<UserId> {
         this.likedModels.add(modelId);
     }
 
-    private Username initializeUserName(String username) {
-        Username currentUsername = new Username(username);
-        if (currentUsername.validateUsername()) {
-            return currentUsername;
-        }
-        throw new UserDomainException("Username is not valid");
-    }
-
-    private Email initializeEmail(String email) {
-        Email currentEmail = new Email(email);
-        if (currentEmail.isValid()) {
-            return currentEmail;
-        }
-        throw new UserDomainException("Email is not valid");
-
-    }
-
-    private void setUserRole(UserRoleEnum roleEnum) {
-        UserRole userRole = new UserRole.Builder()
-                .roleEnum(roleEnum)
-                .build();
-        this.roles.add(userRole);
-    }
-
     public Username getUsername() {
         return username;
     }
 
     public Email getEmail() {
         return email;
+    }
+
+    public UserStatus getUserStatus() {
+        return userStatus;
     }
 
     public Money getUserMoney() {
@@ -122,6 +112,7 @@ public class User extends AggregateRoot<UserId> {
         private UserId userId;
         private Username username;
         private Email email;
+        private UserStatus userStatus;
         private Money userMoney;
         private List<UserRole> roles;
         private List<ModelId> ownedModels;
@@ -147,6 +138,11 @@ public class User extends AggregateRoot<UserId> {
 
         public Builder email(Email val) {
             email = val;
+            return this;
+        }
+
+        public Builder userStatus(UserStatus val) {
+            userStatus = val;
             return this;
         }
 

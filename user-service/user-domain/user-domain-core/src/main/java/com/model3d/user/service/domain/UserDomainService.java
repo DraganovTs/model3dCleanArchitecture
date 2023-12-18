@@ -14,7 +14,7 @@ public interface UserDomainService {
 
     UserDownloadedModelEvent userDownloadModel(User user,Model model);
 
-    UserLikedModelEvent userLikedModel(User user,Model model);
+    UserLikedModelEvent userLikeModel(User user, Model model);
 
     UserUploadModelEvent userUploadModel(User user,Model model);
 }

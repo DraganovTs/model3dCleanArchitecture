@@ -7,7 +7,6 @@ import com.model3d.system.user.service.domain.dto.createandupdate.UpdateUserResp
 import com.model3d.system.user.service.domain.ports.input.service.UserApplicationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
 @Slf4j
 @Service
